@@ -22,7 +22,7 @@ export default function ResizableDivider({
   const [isDragging, setIsDragging] = useState(false);
   const [startPosition, setStartPosition] = useState({ x: 0, y: 0 });
   const lastDelta = useRef(0);
-  const frameRef = useRef<number>();
+  const frameRef = useRef<number>(0);
 
   const handleDragStart = useCallback((clientX: number, clientY: number) => {
     setIsDragging(true);

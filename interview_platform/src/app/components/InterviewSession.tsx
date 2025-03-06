@@ -199,7 +199,7 @@ export default function InterviewSession() {
             background: 'var(--card-bg)', 
             borderLeft: '1px solid var(--card-border)' 
           }}>
-          <div className="h-72 p-4 flex items-center justify-center relative overflow-hidden rounded-lg" style={{ background: 'var(--code-bg)', border: '1px solid var(--card-border)' }}>
+          {/* <div className="h-72 p-4 flex items-center justify-center relative overflow-hidden rounded-lg" style={{ background: 'var(--code-bg)', border: '1px solid var(--card-border)' }}>
             <div className="text-center">
               <div className="w-20 h-20 rounded-full mx-auto mb-4 flex items-center justify-center shadow-md" style={{ background: 'var(--header-bg)' }}>
                 <svg
@@ -219,13 +219,28 @@ export default function InterviewSession() {
               </div>
               <p className="text-sm font-medium" style={{ color: 'var(--foreground)' }}>Webcam functionality coming soon</p>
             </div>
-          </div>
+          </div> */}
 
           {/* Video Feed from Flask API */}
           <h2 className="text-xl font-bold mb-4 mt-4" style={{ color: 'var(--header-text)' }}>
             Video Feed
           </h2>
           <img src="http://localhost:5000/video_feed" alt="Webcam Feed" style={{ width: '100%', height: 'auto' }} />
+
+          {/* Video Feed from Flask API */}
+          <h2 className="text-xl font-bold mb-4 mt-4" style={{ color: 'var(--header-text)' }}>
+            Mesh Video Feed
+          </h2>
+          <img src="http://localhost:5000/face_mesh_video_feed" alt="Webcam Mesh Feed" style={{ width: '100%', height: 'auto' }} />
+
+            {/* Live Transcription */}
+          <h2 className="text-xl font-bold mb-4 mt-4" style={{ color: 'var(--header-text)' }}>
+            Transcription
+          </h2>
+          <p className="border p-4 rounded" style={{ background: 'var(--card-bg)', color: 'var(--foreground)'
+          }}>
+            {'Hello, I am Akash Dubey.'}
+          </p>
 
           {/* Interview Notes */}
           <h2 className="text-xl font-bold mb-4 mt-4" style={{ color: 'var(--header-text)' }}>
