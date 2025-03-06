@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useTheme } from '../context/ThemeContext';
 import Editor from '@monaco-editor/react';
 import ResizableDivider from './ResizableDivider';
@@ -12,6 +12,11 @@ export default function InterviewSession() {
   const [selectedLanguage, setSelectedLanguage] = useState('javascript');
   const [compileOutput, setCompileOutput] = useState('');
   const [isCompiling, setIsCompiling] = useState(false);
+
+  const [isRecording, setIsRecording] = useState(false);
+  const [transcription, setTranscription] = useState('');
+  const recognitionRef = useRef<SpeechRecognition | null>(null);
+
   
   // Panel sizing state
   const [editorWidth, setEditorWidth] = useState<number | null>(null);
@@ -45,6 +50,38 @@ export default function InterviewSession() {
       setCompileOutput(`Error: ${error instanceof Error ? error.message : 'Unknown error occurred'}`);
     } finally {
       setIsCompiling(false);
+    }
+  };
+
+  const startRecognition = () => {
+    if (!('webkitSpeechRecognition' in window)) {
+      alert('Speech recognition not supported in this browser.');
+      return;
+    }
+  
+    const recognition = new (window as any).webkitSpeechRecognition();
+    recognition.continuous = true;
+    recognition.interimResults = true;
+    recognition.lang = 'en-US';
+  
+    recognition.onstart = () => setIsRecording(true);
+    recognition.onend = () => setIsRecording(false);
+    
+    recognition.onresult = (event: SpeechRecognitionEvent) => {
+      let transcript = '';
+      for (let i = event.resultIndex; i < event.results.length; i++) {
+        transcript += event.results[i][0].transcript;
+      }
+      setTranscription(transcript);
+    };
+  
+    recognitionRef.current = recognition;
+    recognition.start();
+  };
+  
+  const stopRecognition = () => {
+    if (recognitionRef.current) {
+      recognitionRef.current.stop();
     }
   };
 
@@ -212,13 +249,21 @@ export default function InterviewSession() {
           </h2>
           <img src="http://localhost:5000/face_mesh_video_feed" alt="Webcam Mesh Feed" style={{ width: '75%', height: 'auto' }} />
 
-          {/* Live Transcription */}
+          <button
+            onClick={isRecording ? stopRecognition : startRecognition}
+            className="px-4 py-2 rounded-md bg-red-500 text-white"
+          >
+            {isRecording ? 'Stop Recording' : 'Start Recording'}
+          </button>
+
           <h2 className="text-xl font-bold mb-4 mt-4" style={{ color: 'var(--header-text)' }}>
-            Transcription
+            Live Transcription
           </h2>
           <p className="border p-4 rounded" style={{ background: 'var(--card-bg)', color: 'var(--foreground)' }}>
-            {'Hello, I am Akash Dubey.'}
+            {transcription || 'Click "Start Recording" to begin speech recognition...'}
           </p>
+
+
 
           {/* Interview Notes */}
           <h2 className="text-xl font-bold mb-4 mt-4" style={{ color: 'var(--header-text)' }}>
