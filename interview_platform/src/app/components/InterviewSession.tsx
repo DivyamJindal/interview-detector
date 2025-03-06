@@ -221,6 +221,12 @@ export default function InterviewSession() {
             </div>
           </div>
 
+          {/* Video Feed from Flask API */}
+          <h2 className="text-xl font-bold mb-4 mt-4" style={{ color: 'var(--header-text)' }}>
+            Video Feed
+          </h2>
+          <img src="http://localhost:5000/video_feed" alt="Webcam Feed" style={{ width: '100%', height: 'auto' }} />
+
           {/* Interview Notes */}
           <h2 className="text-xl font-bold mb-4 mt-4" style={{ color: 'var(--header-text)' }}>
             Interview Notes

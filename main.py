@@ -17,7 +17,7 @@ recognized_text = ""
 is_recording = False  # Flag to track if recording is active
 
 # Function to listen for speech and update recognized text
-def recognize_speech():
+def recognize_speech(): 
     global recognized_text
     global is_recording
 
