@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react';
 import { useTheme } from '../context/ThemeContext';
 
-import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
 
 
 const InterviewPage: React.FC = () => {
@@ -11,7 +10,7 @@ const InterviewPage: React.FC = () => {
     const [recognizedText, setRecognizedText] = useState<string>('');
     const [notes, setNotes] = useState<string>('');
     const [isRecording, setIsRecording] = useState<boolean>(false);
-    const { transcript, listening, resetTranscript, browserSupportsSpeechRecognition } = useSpeechRecognition();
+    /* const { transcript, listening, resetTranscript, browserSupportsSpeechRecognition } = useSpeechRecognition();
 
     const startRecording = () => {
         SpeechRecognition.startListening();
@@ -21,17 +20,17 @@ const InterviewPage: React.FC = () => {
     const stopRecording = () => {
         SpeechRecognition.stopListening();
         setIsRecording(false);
-    };
+    }; */
 
     return (
         <div className="flex flex-col h-screen" style={{ background: 'var(--background)', color: 'var(--foreground)' }}>
             <header className="p-6 border-b shadow-sm" style={{ background: 'var(--header-bg)', borderColor: 'var(--card-border)' }}>
                 <h1 className="text-3xl font-bold" style={{ color: 'var(--header-text)' }}>
                     Interviewer Dashboard
-                </h1>
+                </h1>{/* 
                 <button onClick={isRecording ? stopRecording : startRecording}>
                     {isRecording ? 'Stop Recording' : 'Start Recording'}
-                </button>
+                </button> */}
             </header>
 
             <main className="flex-1 flex overflow-hidden relative" style={{ background: 'var(--background)' }}>
@@ -49,7 +48,7 @@ const InterviewPage: React.FC = () => {
                         Recognized Speech
                     </h2>
                     <p className="border p-4 rounded" style={{ background: 'var(--card-bg)', color: 'var(--foreground)' }}>
-                        {transcript || 'No speech recognized yet.'}
+                        {'No speech recognized yet.'}
                     </p>
                 </div>
             </main>

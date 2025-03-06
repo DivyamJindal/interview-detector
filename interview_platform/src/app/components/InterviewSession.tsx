@@ -193,52 +193,30 @@ export default function InterviewSession() {
 
         {/* Right panel - Notes */}
         <div 
-          className="flex flex-col p-4" 
+          className="flex flex-col p-4 overflow-auto"
           style={{ 
             width: `${notesWidth}px`, 
             background: 'var(--card-bg)', 
-            borderLeft: '1px solid var(--card-border)' 
+            borderLeft: '1px solid var(--card-border)', 
+            height: '100%',
           }}>
-          {/* <div className="h-72 p-4 flex items-center justify-center relative overflow-hidden rounded-lg" style={{ background: 'var(--code-bg)', border: '1px solid var(--card-border)' }}>
-            <div className="text-center">
-              <div className="w-20 h-20 rounded-full mx-auto mb-4 flex items-center justify-center shadow-md" style={{ background: 'var(--header-bg)' }}>
-                <svg
-                  className="w-10 h-10" style={{ color: 'var(--accent)' }}
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"
-                  />
-                </svg>
-              </div>
-              <p className="text-sm font-medium" style={{ color: 'var(--foreground)' }}>Webcam functionality coming soon</p>
-            </div>
-          </div> */}
-
           {/* Video Feed from Flask API */}
           <h2 className="text-xl font-bold mb-4 mt-4" style={{ color: 'var(--header-text)' }}>
             Video Feed
           </h2>
-          <img src="http://localhost:5000/video_feed" alt="Webcam Feed" style={{ width: '100%', height: 'auto' }} />
+          <img src="http://localhost:5000/video_feed" alt="Webcam Feed" style={{ width: '75%', height: 'auto' }} />
 
-          {/* Video Feed from Flask API */}
+          {/* Mesh Video Feed */}
           <h2 className="text-xl font-bold mb-4 mt-4" style={{ color: 'var(--header-text)' }}>
             Mesh Video Feed
           </h2>
-          <img src="http://localhost:5000/face_mesh_video_feed" alt="Webcam Mesh Feed" style={{ width: '100%', height: 'auto' }} />
+          <img src="http://localhost:5000/face_mesh_video_feed" alt="Webcam Mesh Feed" style={{ width: '75%', height: 'auto' }} />
 
-            {/* Live Transcription */}
+          {/* Live Transcription */}
           <h2 className="text-xl font-bold mb-4 mt-4" style={{ color: 'var(--header-text)' }}>
             Transcription
           </h2>
-          <p className="border p-4 rounded" style={{ background: 'var(--card-bg)', color: 'var(--foreground)'
-          }}>
+          <p className="border p-4 rounded" style={{ background: 'var(--card-bg)', color: 'var(--foreground)' }}>
             {'Hello, I am Akash Dubey.'}
           </p>
 
@@ -251,7 +229,8 @@ export default function InterviewSession() {
             style={{ 
               background: 'var(--input-bg)', 
               color: 'var(--foreground)', 
-              border: '1px solid var(--input-border)'
+              border: '1px solid var(--input-border)',
+              height: '24px'
             }}
             placeholder="Take notes during the interview..."
             value={notes}
