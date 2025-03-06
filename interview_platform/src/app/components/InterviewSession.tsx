@@ -14,7 +14,7 @@ export default function InterviewSession() {
   const [isCompiling, setIsCompiling] = useState(false);
 
   const [isRecording, setIsRecording] = useState(false);
-  const [transcription, setTranscription] = useState('');
+  const [transcripts, setTranscripts] = useState<{ text: string; timestamp: string }[]>([]);
   const recognitionRef = useRef<SpeechRecognition | null>(null);
 
   
@@ -53,6 +53,12 @@ export default function InterviewSession() {
     }
   };
 
+  const getTranscription = async () => {
+    // use the transcripts array to return a string of all the text
+    const transcription = transcripts.map((item) => item.text).join(' ');
+    return transcription;
+  };
+
   const startRecognition = () => {
     if (!('webkitSpeechRecognition' in window)) {
       alert('Speech recognition not supported in this browser.');
@@ -72,7 +78,8 @@ export default function InterviewSession() {
       for (let i = event.resultIndex; i < event.results.length; i++) {
         transcript += event.results[i][0].transcript;
       }
-      setTranscription(transcript);
+      const timestamp = new Date().toLocaleTimeString();
+      setTranscripts(prev => [...prev, { text: transcript, timestamp }]);
     };
   
     recognitionRef.current = recognition;
@@ -131,7 +138,7 @@ export default function InterviewSession() {
             </h1>
             <div className="flex items-center space-x-3 mt-3">
               <div className="h-3 w-3 bg-red-500 rounded-full"></div>
-              <span className="text-sm text-gray-600 font-medium">Not Recording</span>
+              <span className="text-sm text-gray-600 font-medium">{isRecording ? 'Recording...' : 'Not Recording'}</span>
             </div>
           </div>
           <div className="flex items-center space-x-4">
@@ -260,10 +267,20 @@ export default function InterviewSession() {
             Live Transcription
           </h2>
           <p className="border p-4 rounded" style={{ background: 'var(--card-bg)', color: 'var(--foreground)' }}>
-            {transcription || 'Click "Start Recording" to begin speech recognition...'}
+            {getTranscription() || 'Click "Start Recording" to begin speech recognition...'}
           </p>
 
-
+          {/* Display saved transcripts */}
+          <h2 className="text-xl font-bold mb-4 mt-4" style={{ color: 'var(--header-text)' }}>
+            Saved Transcripts
+          </h2>
+          <ul className="border p-4 rounded" style={{ background: 'var(--card-bg)', color: 'var(--foreground)' }}>
+            {transcripts.map((item, index) => (
+              <li key={index}>
+                {item.timestamp}: {item.text}
+              </li>
+            ))}
+          </ul>
 
           {/* Interview Notes */}
           <h2 className="text-xl font-bold mb-4 mt-4" style={{ color: 'var(--header-text)' }}>
@@ -275,7 +292,6 @@ export default function InterviewSession() {
               background: 'var(--input-bg)', 
               color: 'var(--foreground)', 
               border: '1px solid var(--input-border)',
-              height: '24px'
             }}
             placeholder="Take notes during the interview..."
             value={notes}
