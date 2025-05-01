@@ -13,7 +13,14 @@ cap = cv2.VideoCapture(0)  # Initialize webcam
 
 # Initialize mediapipe for face mesh
 mp_face_mesh = mp.solutions.face_mesh
-face_mesh = mp_face_mesh.FaceMesh(min_detection_confidence=0.5, min_tracking_confidence=0.5)
+face_mesh = mp_face_mesh.FaceMesh(
+    static_image_mode=False,
+    max_num_faces=1,
+    min_detection_confidence=0.3,  # Lower confidence threshold for faster detection
+    min_tracking_confidence=0.3,   # Lower tracking confidence for faster tracking
+    refine_landmarks=False,        # Use simpler model
+    # model_complexity=0             # Use the lightest model (0 is fastest, 2 is most accurate)
+)
 mp_drawing = mp.solutions.drawing_utils
 
 def recognize_speech():
@@ -30,6 +37,10 @@ def recognize_speech():
                     pass
                 except sr.RequestError as e:
                     print(f"Could not request results; {e}")
+
+@app.route('/', methods=['GET'])
+def hello():
+    return jsonify({"status": "All good"})
 
 @app.route('/start', methods=['POST'])
 def start_recording():
@@ -68,7 +79,11 @@ def face_mesh_feed():
 
         # Process the frame with MediaPipe Face Mesh
         rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-        results = face_mesh.process(rgb_frame)
+
+        # Inside your face_mesh_feed loop:
+        small = cv2.resize(frame, (0,0), fx=0.5, fy=0.5)  # half resolution
+        rgb_small = cv2.cvtColor(small, cv2.COLOR_BGR2RGB)
+        results = face_mesh.process(rgb_small)
 
         if results.multi_face_landmarks:
             for landmarks in results.multi_face_landmarks:
@@ -106,4 +121,4 @@ def recognize_speech_from_file():
 
 if __name__ == '__main__':
     threading.Thread(target=recognize_speech).start()
-    app.run(port=5000) 
+    app.run(port=5000, debug=True) 

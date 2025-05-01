@@ -17,11 +17,30 @@ export default function InterviewSession() {
   const [transcription, setTranscription] = useState('');
   const recognitionRef = useRef<SpeechRecognition | null>(null);
 
-  
+  // Add warning states
+  const [showLookingDownWarning, setShowLookingDownWarning] = useState(false);
+  const [showSpeakingWarning, setShowSpeakingWarning] = useState(false);
+
   // Panel sizing state
   const [editorWidth, setEditorWidth] = useState<number | null>(null);
   const [notesWidth, setNotesWidth] = useState<number>(384); // Default 96 * 4 = 384px
   const [outputHeight, setOutputHeight] = useState<number>(192); // Default 48 * 4 = 192px
+
+  // Add keyboard event handling
+  useEffect(() => {
+    const handleKeyPress = async (event: KeyboardEvent) => {
+      if (event.key.toUpperCase() === 'L') {
+        setShowLookingDownWarning(prev => !prev);
+      } else if (event.key.toUpperCase() === 'P') {
+        setShowSpeakingWarning(prev => !prev);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyPress);
+    return () => {
+      window.removeEventListener('keydown', handleKeyPress);
+    };
+  }, []);
 
   const handleCompile = async () => {
     setIsCompiling(true);
@@ -123,6 +142,20 @@ export default function InterviewSession() {
   
   return (
     <div className="flex flex-col h-screen" style={{ background: 'var(--background)', color: 'var(--foreground)' }}>
+      {/* Warning Popups */}
+      <div className="fixed top-4 right-4 z-50 space-y-2">
+        {showLookingDownWarning && (
+          <div className="bg-yellow-500 text-white px-4 py-2 rounded-lg shadow-lg animate-fade-in">
+            WARNING: Interviewee looking down too much
+          </div>
+        )}
+        {showSpeakingWarning && (
+          <div className="bg-red-500 text-white px-4 py-2 rounded-lg shadow-lg animate-fade-in">
+            WARNING: Interviewee speaking irregularly
+          </div>
+        )}
+      </div>
+
       <header className="p-6 border-b shadow-sm" style={{ background: 'var(--header-bg)', borderColor: 'var(--card-border)' }}>
         <div className="flex items-center justify-between">
           <div>
@@ -262,8 +295,6 @@ export default function InterviewSession() {
           <p className="border p-4 rounded" style={{ background: 'var(--card-bg)', color: 'var(--foreground)' }}>
             {transcription || 'Click "Start Recording" to begin speech recognition...'}
           </p>
-
-
 
           {/* Interview Notes */}
           <h2 className="text-xl font-bold mb-4 mt-4" style={{ color: 'var(--header-text)' }}>
